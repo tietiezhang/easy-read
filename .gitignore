@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+.conda/
+dist/
+build/
+*.egg-info/
+
+.env
+configs/api.yml
+
+projects/*
+!projects/.gitkeep
+
+*.log.idea/
+.idea/
