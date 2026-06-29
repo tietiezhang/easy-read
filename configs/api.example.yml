@@ -1,0 +1,50 @@
+providers:
+  main_api:
+    type: openai_compatible
+    base_url: "https://example.com/v1"
+    api_key_env: EASY_READ_API_KEY
+    headers: { }
+    # HTTP-Referer: ""
+    # X-Title: ""
+
+  backup_api:
+    type: openai_compatible
+    base_url: "https://backup-example.com/v1"
+    api_key_env: EASY_READ_BACKUP_API_KEY
+
+model_profiles:
+  terms_model:
+    provider: main_api
+    model: "your-terms-model"
+    endpoint: "/chat/completions"
+    request:
+      timeout: 120
+      retry: 3
+    body:
+      temperature: 0.1
+      max_tokens: 8192
+      stream: false
+
+  translate_model:
+    provider: main_api
+    model: "your-translate-model"
+    endpoint: "/chat/completions"
+    request:
+      timeout: 300
+      retry: 3
+    body:
+      temperature: 0.2
+      max_tokens: 32768
+      stream: false
+
+  polish_model:
+    provider: backup_api
+    model: "your-polish-model"
+    endpoint: "/chat/completions"
+    request:
+      timeout: 300
+      retry: 2
+    body:
+      temperature: 0.3
+      max_tokens: 32768
+      stream: false

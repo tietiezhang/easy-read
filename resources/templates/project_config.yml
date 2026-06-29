@@ -1,0 +1,86 @@
+project:
+  source_language: en
+  target_language: zh
+
+01 import:
+  allowed_input_types:
+    - epub
+    - pdf
+
+02 extract:
+  keep_source_units: true
+  filename_prefix_number: true
+  filename_max_chars: 30
+  pdf_fallback_filename_from_first_line: true
+  extract_images: true
+  # ocr_enabled: false
+  # ocr_engine: ""
+  # ocr_language: en
+
+03 select:
+  keep_readable_filename: true
+  select_id_prefix: select
+  select_id_digits: 3
+
+04 chunk:
+  chunk_mode: by_heading
+  section_summary: true
+  # target_tokens: 8000
+  # max_tokens: 20000
+  never_split_paragraph: true
+  chunk_id_prefix: chunk
+  chunk_id_digits: 3
+
+05 terms:
+  enabled: true
+  model_profile: terms_model
+  prompt: resources/prompts/extract_terms.md
+  term_file_format: tsv
+  extract_concept_terms: true
+  extract_titles: true
+  concept_terms_suffix: terms
+  titles_suffix: titles
+  write_back_to_chunk_terms: true
+
+06 translate:
+  model_profile: translate_model
+  prompt: resources/prompts/translate.md
+  translation_mode: faithful_with_notes
+  term_injection: chunk_only
+  title_placeholder_enabled: true
+  select_parallel: true
+  chunk_serial_within_select: true
+
+07 qa:
+  enabled: true
+  check_empty_output: true
+  check_markdown_structure: true
+  check_image_refs: true
+  check_possible_truncation: true
+  check_terms: true
+  # model_qa_enabled: false
+  # model_profile: qa_model
+  # prompt: resources/prompts/qa.md
+
+08 polish:
+  enabled: false
+  model_profile: polish_model
+  prompt: resources/prompts/polish.md
+  # temperature: 0.3
+  # max_output_tokens: 32768
+
+09 assemble:
+  use_polish: false
+  original_image_dir: images/original
+  redraw_image_dir: images/redraw
+  output_md: assembled/full_book.md
+
+10 export:
+  export_epub: true
+  export_pdf: true
+  use_book_title_as_filename: true
+  # pdf_font: ""
+  # pdf_page_size: A4
+  # pdf_margin: "20mm"
+  # epub_language: zh
+  # epub_cover: ""
